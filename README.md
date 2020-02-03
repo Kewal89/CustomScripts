@@ -1,4 +1,3 @@
 # Linux-CustomScripts
 
-* Screenshot Command
-qdbus org.kde.Spectacle / StartAgent
+* Screenshot Command : qdbus org.kde.Spectacle / StartAgent
