@@ -1,7 +1,29 @@
 @ECHO OFF
+SETLOCAL ENABLEDELAYEDEXPANSION
+
+:MENU
+ECHO.
+ECHO ============================================================
+ECHO Run This Only In Your RN Project Root Directory
+ECHO ============================================================
+ECHO.
+ECHO 1 - Start ADB
+ECHO 2 - Start Metro Server
+ECHO 3 - Start Run Android
+ECHO 4 - Start Android Debugger
+ECHO 5 - Exit
+ECHO.
+SET /P "Menu=Enter Your Choice : "
+IF %Menu%==1 GOTO ADB
+IF %Menu%==2 GOTO METRO
+IF %Menu%==3 GOTO ANDROID
+IF %Menu%==4 GOTO DEBUGGER
+IF %Menu%==5 GOTO EXIT_FFS
+
+:ADB
 ECHO ==================== ADB ====================
-SET "ip=<add-ip-here>" 
-SET "port=<add-port-here>"
+SET "ip=192.168.31.19" 
+SET "port=5555"
 SET /p adb_server="Run ADB w/o Killing ? (y/n) : "
 IF %adb_server%==y (
     ECHO Starting ADB Server...
@@ -15,12 +37,14 @@ IF %adb_server%==y (
     )
     
 )
+GOTO MENU
 
+:METRO
 ECHO ==================== Metro Server ====================
 SET /p metro_server="Start React Native Metro Server w/o Cache ? (y/n) : "
 IF %metro_server%==y (
     ECHO Starting Metro Server...
-    START CMD /k "react-native START"
+    START CMD /k "react-native start"
 ) ELSE (
     IF %metro_server%==n (
         ECHO Resetting Cache...
@@ -30,6 +54,9 @@ IF %metro_server%==y (
     )
     
 )
+GOTO MENU
+
+:ANDROID
 ECHO ==================== Run Android ====================
 SET /p application="Start React Native Application w/o Gradle Clean ? (y/n) : "
 IF %application%==y (
@@ -43,20 +70,25 @@ IF %application%==y (
         ECHO Skipping RN Application...
     )
 )
+GOTO MENU
 
-REM ECHO ========== WARNING (Use Only If You Know What's This FFS) ==========
-REM SET /p logger="Do You Want To Run Logger ? (y/n) : "
-REM IF %logger%==y (
-REM     SET /p specStr="Scan Specific String ? (y/n) : "
-REM     IF "%spec%"=="" (
-REM         SET /p logger_string="Enter String ?  : "
-REM         ECHO Starting Android Debug Logger On %logger_string% ...
-REM         START CMD /k "adb logcat | findstr %logger_string%"
-REM     ) ELSE (
-REM         ECHO Starting Android Debug Logger...
-REM         START CMD /k "adb logcat"
-REM     )
-REM ) ELSE (
-REM     ECHO Skipping Logger... 
-REM )
+:DEBUGGER
+ECHO ========== WARNING (Use Only If You Know What's This FFS) ==========
+SET /p logger="Do You Want To Run Logger ? (y/n) : "
+IF %logger%==n (
+    ECHO Skipping Logger...
+) ELSE (
+    SET /p specStr="Scan Specific String ? (y/n) : "
+    IF !specStr!==y (
+        SET /p logger_string="Enter String ?  : "
+        ECHO Starting Android Debug Logger On !logger_string! ...
+        START CMD /k "adb logcat | findstr !logger_string!"
+    ) ELSE (
+        ECHO Starting Android Debug Logger...
+        START CMD /k "adb logcat"
+    )
+)
+GOTO MENU
+
+:EXIT_FFS
 PAUSE
