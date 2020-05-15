@@ -11,14 +11,16 @@ ECHO 1 - Start ADB
 ECHO 2 - Start Metro Server
 ECHO 3 - Start Run Android
 ECHO 4 - Start Android Debugger
-ECHO 5 - Exit
+ECHO 5 - Blank Command Prompt
+ECHO 99 - Exit
 ECHO.
 SET /P "Menu=Enter Your Choice : "
 IF %Menu%==1 GOTO ADB
 IF %Menu%==2 GOTO METRO
 IF %Menu%==3 GOTO ANDROID
 IF %Menu%==4 GOTO DEBUGGER
-IF %Menu%==5 GOTO EXIT_FFS
+IF %Menu%==5 GOTO BLANK
+IF %Menu%==99 GOTO EXIT_FFS
 
 :ADB
 ECHO ==================== ADB ====================
@@ -88,6 +90,10 @@ IF %logger%==n (
         START CMD /k "adb logcat"
     )
 )
+GOTO MENU
+
+:BLANK
+START CMD.exe
 GOTO MENU
 
 :EXIT_FFS
